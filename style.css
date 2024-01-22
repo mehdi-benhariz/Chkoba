@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overflow-y: auto; /* Enable vertical scrolling for this container */
+
+}
+
+.start-page {
+    background: url('public/img/chkobba.png') no-repeat center center fixed;
+    background-size: 100%; /* Adjust the percentage as needed */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#startButton {
+    padding: 20px 35px;
+    font-size: 18px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#startButton:hover {
+    background-color: #45a049; /* Darker Green */
+    transform: scale(1.05);
+}
+
+/*game style*/
+.general-container { 
+    display: grid;
+    grid-template-columns: auto auto;
+
+}    
+
+/* for tracking */
+#tracking {
+    background-color: #4CAF50;
+    width: 100px;
+    height: 100px;
+    grid-column: 1;
+
+}
+
+#game-container {
+    grid-column: 2;
+
+}
+/* for computer */
+.card-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    padding: 40px 0;
+}
+#computer-hand {
+    display: flex;
+    justify-content: center;
+    gap : 20px;
+}
+#computer-hand img {
+    width: 60px; /* Adjust the width as needed */
+    height: auto;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    /* make cards color black so can't be seen*/
+    filter: grayscale(100%);
+
+
+}
+
+#computer-hand img:hover {
+    transform: scale(1.2);
+}
+/* for table */
+#table {
+    background: url('./public/img/table.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#table-cards {
+    display: flex;
+    gap: 10px; /* Adjust the gap as needed */
+    padding: 20px; /* Adjust the padding as needed */
+}
+
+#table-cards div {
+    width: 60px; /* Adjust the width as needed */
+    height: 150px;
+    text-align: center;
+}
+
+#table-cards img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+
+/* for player */
+
+#player-hand {
+    display: flex;
+    justify-content: center;
+    gap : 20px;
+
+}
+#player-hand img {
+    width: 60px; /* Adjust the width as needed */
+    height: auto;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+
+
+
+
+}
+
+#player-hand img:hover {
+    transform: scale(1.2);
+}
+
+
