@@ -29,6 +29,8 @@ let table = []
 
 
 let isPlayerTurn = true;
+let isPlayerLast = false;
+
 const throwBtn = document.getElementById('throwBtn');
 const eatBtn = document.getElementById('eatBtn');
 
@@ -51,12 +53,23 @@ function throwCard(card) {
         isPlayerTurn = false;
     }
 }
+//eat the rest of cards on deck
+function eatRestCards() {
+    if (isPlayerLast)
+        playerWonCards.push(...table);
+    else
+        computerWonCards.push(...table);
+    table = [];
+
+}
 
 function eatCard(handCard, tableCards) {
+
     if (!isPlayerTurn) {
         //check if sum of table cards is equal to hand card
         let sum = 0;
         //sum table cards with class card-selected and inside div with id table-cards
+
         for (const card of tableCards)
             sum += parseInt(card.val);
 
@@ -93,20 +106,36 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(card.src);
             //find the card from player hand
             const playerCard = playerHand.find(c => c.img === cardImgSrc);
-            //find the card from table
+            if (playerCard)
+                playerCard.isSelected = !playerCard.isSelected;
+
             const tableCards = table.filter(c => c.img === cardImgSrc);
-            //check if card is selected change it's value attribute
-            playerCard.selected = !playerCard.isSelected;
-            tableCards.forEach(c => c.selected = !c.isSelected);
+            if (tableCards.length > 0)
+                tableCards.forEach(c => c.isSelected = !c.isSelected);
         })
     });
 });
 //eat cards:
+eatBtn.addEventListener('click', e => {
+    e.preventDefault();
+    console.log({ playerHand, table });
+
+    const selectedHandCard = playerHand.find(c => c.isSelected);
+    const selectedTableCards = table.filter(c => c.isSelected);
+
+    eatCard(selectedHandCard, selectedTableCards);
+    updateUI();
+    //count chkoba
+    if (table.length() == 0)
+        playerChkoba++;
+
+
+});
 
 //throw card: 
 throwBtn.addEventListener('click', e => {
 
-    event.preventDefault();
+    e.preventDefault();
     const selectedHandCard = playerHand.find(c => c.selected);
 
     if (selectedHandCard) {
@@ -199,13 +228,31 @@ function updateTableUI() {
 
     }
 }
+//update computer hand UI
+function updateComputerHandUI() {
+    const computerHandDiv = document.getElementById("computer-hand");
+    // Clear the computer hand div
+    computerHandDiv.innerHTML = "";
+    for (const card of computerHand) {
 
+        // Create a new card div
+        const cardDiv = document.createElement("div");
+        const cardImage = document.createElement("img");
+        cardImage.src = card.img;
+        cardImage.alt = "Card";
+
+        cardDiv.appendChild(cardImage);
+        computerHandDiv.appendChild(cardDiv);
+
+    }
+}
 
 //update UI
 
 function updateUI() {
     upadtePlayerHandUI()
     updateTableUI()
+    updateComputerHandUI()
 }
 
 function startGame() {

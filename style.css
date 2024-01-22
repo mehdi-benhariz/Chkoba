@@ -40,7 +40,7 @@ body {
 
 /* for tracking */
 #tracking {
-    background-color: #4CAF50;
+    background-color: #b6b6b6;
     width: 100px;
     height: 100px;
     grid-column: 1;
@@ -82,6 +82,7 @@ body {
 #table {
     background: url('./public/img/table.png') no-repeat center center fixed;
     background-size: cover;
+    background-attachment: fixed;
     height: 85vh;
     display: flex;
     justify-content: center;
@@ -137,3 +138,27 @@ body {
 }
 
 
+/* throw button */
+#throwBtn {
+    padding: 20px 35px;
+    font-size: 18px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* eat button button */
+
+#eatBtn {
+    padding: 20px 35px;
+    font-size: 18px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
