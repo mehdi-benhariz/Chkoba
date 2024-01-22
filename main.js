@@ -65,7 +65,7 @@ function eatRestCards() {
 
 function eatCard(handCard, tableCards) {
 
-    if (!isPlayerTurn) {
+    if (isPlayerTurn) {
         //check if sum of table cards is equal to hand card
         let sum = 0;
         //sum table cards with class card-selected and inside div with id table-cards
@@ -73,8 +73,10 @@ function eatCard(handCard, tableCards) {
         for (const card of tableCards)
             sum += parseInt(card.val);
 
-        if (sum !== parseInt(handCard.val))
+        if (sum !== parseInt(handCard.val)) {
+            console.log("sum isn't equal !")
             return;
+        }
 
         //add cards to player won cards
         playerWonCards.push(handCard, ...tableCards);
@@ -85,12 +87,11 @@ function eatCard(handCard, tableCards) {
                 table.splice(index, 1);
         }
         //remove card from hand
-        const index = computerHand.findIndex(c => c === handCard);
+        const index = playerHand.findIndex(c => c === handCard);
         if (index !== -1)
-            computerHand.splice(index, 1);
+            playerHand.splice(index, 1);
         //change turn
-        isPlayerTurn = false;
-        updateUI();
+        // isPlayerTurn = false;
     }
 }
 
@@ -126,7 +127,7 @@ eatBtn.addEventListener('click', e => {
     eatCard(selectedHandCard, selectedTableCards);
     updateUI();
     //count chkoba
-    if (table.length() == 0)
+    if (table.length == 0)
         playerChkoba++;
 
 
@@ -136,7 +137,7 @@ eatBtn.addEventListener('click', e => {
 throwBtn.addEventListener('click', e => {
 
     e.preventDefault();
-    const selectedHandCard = playerHand.find(c => c.selected);
+    const selectedHandCard = playerHand.find(c => c.isSelected);
 
     if (selectedHandCard) {
         throwCard(selectedHandCard);
@@ -311,3 +312,37 @@ function calculateScore() {
 }
 
 updateUI();
+// while (table.length !== 0) {
+
+// }
+
+//computer plays
+function computerPlay() {
+
+
+    //get all possible cards to throw
+    let possibleCards = computerHand.filter(c => table.find(t => t.val === c.val));
+    //if no possible cards to throw
+    if (possibleCards.length === 0) {
+        //get random card from computer hand
+        const card = getRandomAndRemove(computerHand);
+        //throw card
+        throwCard(card);
+        //check if computer won
+        if (computerHand.length === 0)
+            isPlayerLast = true;
+        //change turn
+        isPlayerTurn = true;
+        return;
+    }
+    //get random card from possible cards
+    const card = getRandomAndRemove(possibleCards);
+    //throw card
+    throwCard(card);
+    //check if computer won
+    if (computerHand.length === 0)
+        isPlayerLast = true;
+    //change turn
+    isPlayerTurn = true;
+    return;
+}
