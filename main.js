@@ -3,6 +3,8 @@ class Card {
         this.type = type;
         this.val = val;
         this.img = `public/img/cards/${val}_of_${type}.svg.png`;
+        this.isSelected = false;
+
     }
 }
 
@@ -30,6 +32,13 @@ let isPlayerTurn = true;
 const throwBtn = document.getElementById('throwBtn');
 const eatBtn = document.getElementById('eatBtn');
 
+//helper:
+function extractRelativePath(url) {
+    const parts = url.split('/public/');
+    return parts.length > 1 ? 'public/' + parts[1] : url;
+}
+
+
 function throwCard(card) {
     if (isPlayerTurn) {
         const index = playerHand.findIndex(c => c === card);
@@ -47,10 +56,13 @@ function eatCard(handCard, tableCards) {
     if (!isPlayerTurn) {
         //check if sum of table cards is equal to hand card
         let sum = 0;
+        //sum table cards with class card-selected and inside div with id table-cards
         for (const card of tableCards)
             sum += parseInt(card.val);
+
         if (sum !== parseInt(handCard.val))
             return;
+
         //add cards to player won cards
         playerWonCards.push(handCard, ...tableCards);
         //remove cards from table
@@ -65,8 +77,43 @@ function eatCard(handCard, tableCards) {
             computerHand.splice(index, 1);
         //change turn
         isPlayerTurn = false;
+        updateUI();
     }
 }
+
+//select cards:
+document.addEventListener('DOMContentLoaded', function () {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        card.addEventListener('click', function () {
+            this.classList.toggle('card-selected');
+            //find the image of the card
+            cardImgSrc = extractRelativePath(card.src);
+            console.log(card.src);
+            //find the card from player hand
+            const playerCard = playerHand.find(c => c.img === cardImgSrc);
+            //find the card from table
+            const tableCards = table.filter(c => c.img === cardImgSrc);
+            //check if card is selected change it's value attribute
+            playerCard.selected = !playerCard.isSelected;
+            tableCards.forEach(c => c.selected = !c.isSelected);
+        })
+    });
+});
+//eat cards:
+
+//throw card: 
+throwBtn.addEventListener('click', e => {
+
+    event.preventDefault();
+    const selectedHandCard = playerHand.find(c => c.selected);
+
+    if (selectedHandCard) {
+        throwCard(selectedHandCard);
+        updateUI();
+    }
+});
 
 
 
@@ -83,19 +130,16 @@ function getRandomAndRemove(array) {
     if (array.length > 0) {
         // Generate a random index within the array length
         const ind = Math.floor(Math.random() * array.length);
-
         // Get the random element from the array
         const randomCard = array[ind];
-
         // Remove the random element from the array
         array.splice(ind, 1);
-
         // Return the random element
         return randomCard;
-    } else {
+    } else
         // If the array is empty, return null or handle the case accordingly
         return null;
-    }
+
 }
 
 function cut() {
@@ -128,7 +172,7 @@ function upadtePlayerHandUI() {
         const cardImage = document.createElement("img");
         cardImage.src = card.img;
         cardImage.alt = "Card";
-        cardImage.className = "player-card";
+        cardImage.className = "card";
 
         cardDiv.appendChild(cardImage);
         playerHandDiv.appendChild(cardDiv);
@@ -148,7 +192,7 @@ function updateTableUI() {
         const cardImage = document.createElement("img");
         cardImage.src = card.img;
         cardImage.alt = "Card";
-        cardImage.className = "table-card";
+        cardImage.className = "card";
 
         cardDiv.appendChild(cardImage);
         tableDiv.appendChild(cardDiv);
@@ -156,8 +200,8 @@ function updateTableUI() {
     }
 }
 
-//update UI
 
+//update UI
 
 function updateUI() {
     upadtePlayerHandUI()
@@ -166,11 +210,11 @@ function updateUI() {
 
 function startGame() {
     deck = initDeck();
-    console.log(deck)
     cut();
-    console.log({ table, playerHand, computerHand })
+    console.log({ table, playerHand, computerHand, deck })
 }
 startGame();
+
 
 function calculateScore() {
     playerScore = 0;
