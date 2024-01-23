@@ -50,10 +50,9 @@ function throwCard(card) {
             playerHand.isSelected = false;
             table.push(playerHand[index]);
             playerHand.splice(index, 1);
-            isPlayerTurn = false;
             console.log({ table, playerHand, computerHand })
+            isPlayerTurn = false;
         }
-        isPlayerTurn = false;
     }
 }
 //eat the rest of cards on deck
@@ -106,20 +105,20 @@ function eatCard(handCard, tableCards) {
     }
     return false;
 }
+
 function syncSelection(card) {
     const srcImg = extractRelativePath(card.src);
     console.log("sync", { card: card.classList.contains("card-selected"), src: srcImg })
-    const playerCardIndex = playerHand.findIndex(c => c.img === srcImg);
 
+    const playerCardIndex = playerHand.findIndex(c => c.img === srcImg);
     if (playerCardIndex !== -1) {
-        console.log("playerCardIndex", playerCardIndex)
-        playerHand[playerCardIndex].isSelected = !playerHand[playerCardIndex].isSelected;
+        playerHand[playerCardIndex].isSelected = card.classList.contains("card-selected");
+
     } else {
         const tableCardIndex = table.findIndex(c => c.img === srcImg);
-        console.log("tableCardIndex", tableCardIndex)
-        if (tableCardIndex !== -1) {
-            table[tableCardIndex].isSelected = !table[tableCardIndex].isSelected;
-        }
+        if (tableCardIndex !== -1)
+            table[tableCardIndex].isSelected = card.classList.contains("card-selected");
+
     }
     console.log({ playerHand, table })
 
@@ -151,7 +150,6 @@ eatBtn.addEventListener('click', e => {
     if (!eatCard(selectedHandCard, selectedTableCards)) return;
 
     updateUI();
-    // initCardsSelection();
 
     //count chkoba
     if (table.length == 0)
@@ -162,7 +160,7 @@ eatBtn.addEventListener('click', e => {
         computerPlay();
         updateUI();
         isPlayerTurn = true;
-        initCardsSelection()
+
     }, 1000)
 
 });
@@ -176,7 +174,7 @@ throwBtn.addEventListener('click', e => {
 
     if (selectedHandCard) {
         throwCard(selectedHandCard);
-        // initCardsSelection();
+        //update logic
         updateUI();
         // initCardsSelection();
 
@@ -186,7 +184,6 @@ throwBtn.addEventListener('click', e => {
             updateUI();
             computerPlay();
             updateUI();
-            // initCardsSelection();
             isPlayerTurn = true;
         }, 1000)
     }
@@ -197,9 +194,6 @@ runBtn.addEventListener('click', e => {
     run();
     updateUI();
     isPlayerTurn = true;
-    document.addEventListener('DOMContentLoaded', initCardsSelection);
-
-    // initCardsSelection();
 
 });
 
@@ -313,6 +307,8 @@ function updateUI() {
     upadtePlayerHandUI()
     updateTableUI()
     updateComputerHandUI()
+    document.addEventListener('DOMContentLoaded', initCardsSelection);
+
 
 }
 
