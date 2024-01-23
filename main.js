@@ -47,7 +47,7 @@ function throwCard(card) {
     if (isPlayerTurn) {
         const index = playerHand.findIndex(c => c === card);
         if (index !== -1) {
-            playerHand.isSelected = false;
+            playerHand[index].isSelected = false;
             table.push(playerHand[index]);
             playerHand.splice(index, 1);
             console.log({ table, playerHand, computerHand })
@@ -101,12 +101,13 @@ function eatCard(handCard, tableCards) {
             playerHand.splice(index, 1);
         //change turn
         isPlayerTurn = false;
+
         return true;
     }
     return false;
 }
 
-function syncSelection(card) {
+function syncSelectionFromUI(card) {
     const srcImg = extractRelativePath(card.src);
     console.log("sync", { card: card.classList.contains("card-selected"), src: srcImg })
 
@@ -131,7 +132,7 @@ function initCardsSelection() {
     cards.forEach(card => {
         card.addEventListener('click', function () {
             this.classList.toggle('card-selected');
-            syncSelection(this);
+            syncSelectionFromUI(this);
         });
     });
 }
@@ -140,7 +141,9 @@ document.addEventListener('DOMContentLoaded', initCardsSelection);
 //eat cards:
 eatBtn.addEventListener('click', e => {
     e.preventDefault();
-
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card =>
+        syncSelectionFromUI(card));
     console.log({ playerHand, table });
 
     const selectedHandCard = playerHand.find(c => c.isSelected);
@@ -160,7 +163,7 @@ eatBtn.addEventListener('click', e => {
         computerPlay();
         updateUI();
         isPlayerTurn = true;
-
+        initCardsSelection()
     }, 1000)
 
 });
@@ -170,6 +173,9 @@ throwBtn.addEventListener('click', e => {
     console.log("throw")
     e.preventDefault();
 
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card =>
+        syncSelectionFromUI(card));
     const selectedHandCard = playerHand.find(c => c.isSelected);
 
     if (selectedHandCard) {
@@ -185,6 +191,7 @@ throwBtn.addEventListener('click', e => {
             computerPlay();
             updateUI();
             isPlayerTurn = true;
+            initCardsSelection()
         }, 1000)
     }
 });
@@ -194,6 +201,7 @@ runBtn.addEventListener('click', e => {
     run();
     updateUI();
     isPlayerTurn = true;
+    initCardsSelection();
 
 });
 
@@ -307,7 +315,6 @@ function updateUI() {
     upadtePlayerHandUI()
     updateTableUI()
     updateComputerHandUI()
-    document.addEventListener('DOMContentLoaded', initCardsSelection);
 
 
 }
@@ -317,6 +324,7 @@ function startGame() {
     run();
     console.log({ table, playerHand, computerHand, deck })
     updateUI();
+    initCardsSelection();
 }
 
 function calculateScore() {
