@@ -341,15 +341,21 @@ function calculateScore() {
     computerScore = 0;
 
     //carta
-    if (playerWonCards.length > 20)
+    if (playerWonCards.length > 20) {
+        //store in local storage
+        localStorage.setItem("Karta", 1)
         playerScore++;
+    }
     if (playerWonCards.length < 20)
         computerScore++;
+
     //7aya 
     //search for card 7aya 
     let card7 = playerWonCards.find(c => c.type === 'diamonds' && c.val === '7');
-    if (card7)
+    if (card7) {
+        localStorage.setItem("7aya", 1)
         playerScore++;
+    }
     else
         computerScore++;
 
@@ -357,21 +363,27 @@ function calculateScore() {
 
     //dinary
     let dinari = playerWonCards.filter(c => c.type === 'diamonds');
-    if (dinari.length > 5)
+    if (dinari.length > 5) {
         playerScore++;
+        localStorage.setItem("Dinari", 1)
+    }
     else
         computerScore++;
     //birmila
     let sevens = playerWonCards.filter(c => c.val === 7);
-    if (sevens.length > 2)
+    if (sevens.length > 2) {
         playerScore++;
+        localStorage.setItem("Bermila", 1)
+    }
     else
         if (sevens.length < 2)
             computerScore++;
         else {
             let sixes = playerWonCards.filter(c => c.val === 6);
-            if (sixes.length > 2)
+            if (sixes.length > 2) {
                 playerScore++;
+                localStorage.setItem("Bermila", 1)
+            }
             if (sixes.length < 2)
                 computerScore++;
         }
@@ -379,9 +391,10 @@ function calculateScore() {
     //add chkoba
     playerScore += playerChkoba;
     computerScore += computerChkoba;
+    localStorage.setItem("Chkoba", playerChkoba)
+    localStorage.setItem("Score", playerScore)
 
-    console.log({ playerScore, computerScore })
-    alert(`Your score is : ${playerScore} `)
+    alert(`Your score is : ${playerScore}  || computer score is : ${computerScore}`)
 }
 
 
