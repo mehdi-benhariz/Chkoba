@@ -109,7 +109,6 @@ function eatCard(handCard, tableCards) {
 
 function syncSelectionFromUI(card) {
     const srcImg = extractRelativePath(card.src);
-    console.log("sync", { card: card.classList.contains("card-selected"), src: srcImg })
 
     const playerCardIndex = playerHand.findIndex(c => c.img === srcImg);
     if (playerCardIndex !== -1) {
@@ -141,9 +140,11 @@ document.addEventListener('DOMContentLoaded', initCardsSelection);
 //eat cards:
 eatBtn.addEventListener('click', e => {
     e.preventDefault();
+
     const cards = document.querySelectorAll('.card');
     cards.forEach(card =>
         syncSelectionFromUI(card));
+
     console.log({ playerHand, table });
 
     const selectedHandCard = playerHand.find(c => c.isSelected);
@@ -153,11 +154,11 @@ eatBtn.addEventListener('click', e => {
     if (!eatCard(selectedHandCard, selectedTableCards)) return;
 
     updateUI();
+    if (checkGameEnd()) return;
 
     //count chkoba
     if (table.length == 0)
         playerChkoba++;
-    checkGameEnd();
     setTimeout(() => {
         updateUI();
         computerPlay();
@@ -176,15 +177,14 @@ throwBtn.addEventListener('click', e => {
     const cards = document.querySelectorAll('.card');
     cards.forEach(card =>
         syncSelectionFromUI(card));
+
     const selectedHandCard = playerHand.find(c => c.isSelected);
 
     if (selectedHandCard) {
         throwCard(selectedHandCard);
-        //update logic
         updateUI();
-        // initCardsSelection();
 
-        checkGameEnd();
+        if (checkGameEnd()) return;
 
         setTimeout(() => {
             updateUI();
@@ -197,6 +197,7 @@ throwBtn.addEventListener('click', e => {
 });
 
 runBtn.addEventListener('click', e => {
+    if (checkGameEnd()) return;
     updateUI();
     run();
     updateUI();
@@ -261,7 +262,8 @@ function upadtePlayerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        cardImage.src = card.img;
+        console.log({ img: card.img })
+        cardImage.src = card?.img;
         cardImage.alt = "Card";
         cardImage.className = "card";
 
@@ -372,6 +374,7 @@ function calculateScore() {
     computerScore += computerChkoba;
 
     console.log({ playerScore, computerScore })
+    alert(`Your score is : ${playerScore} `)
 }
 
 
@@ -389,22 +392,23 @@ function computerPlay() {
             } tCardInd++;
 
         }
-        cCardInd++;
         if (computerWillEat) break;
+        cCardInd++;
     }
     if (computerWillEat) {
         computerWonCards.push(computerHand[cCardInd], table[tCardInd]);
         computerHand.splice(cCardInd, 1);
         table.splice(tCardInd, 1);
-        console.log({ table, playerHand, computerHand })
+        console.log("computer eat")
+
     } else {
-        //if no possible  throw ranom card
+        //if no possible  throw random card
         const index = Math.floor(Math.random() * computerHand.length);
         table.push(computerHand[index]);
         computerHand.splice(index, 1);
-        console.log({ table, playerHand, computerHand })
-
+        console.log("computer throw")
     }
+    console.log("computer play", { table, playerHand, computerHand })
     isPlayerTurn = true;
 
 }
@@ -414,6 +418,8 @@ function checkGameEnd() {
         console.log("game ended")
         eatRestCards()
         calculateScore();
+        //redirect to new page
+        window.location.href = "result.html";
         return true;
     }
     return false;
