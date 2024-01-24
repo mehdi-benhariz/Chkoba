@@ -164,7 +164,7 @@ body {
 
 /* eat button button */
 
-#eatBtn , #runBtn{
+#eatBtn , #runBtn , #playAgainBtn{
     padding: 20px 35px;
     font-size: 18px;
     background-color: #4CAF50; /* Green */
@@ -177,3 +177,37 @@ body {
 }
 
 /* design the result page */
+#result-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #68ad6b;
+}
+
+#score-table {
+    width: 400px;
+    height: 400px; 
+    margin: 0 auto; 
+    background-color: rgba(241, 239, 239, 0.6); 
+    border-radius: 10px; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+}
+
+li {
+    list-style: none;
+    margin: 12px 60px 12px 0;
+}
+
+#score {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f1f1f;
+    margin: 0;
+    padding: 0;
+}

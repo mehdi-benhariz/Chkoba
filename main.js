@@ -159,13 +159,15 @@ eatBtn.addEventListener('click', e => {
     //count chkoba
     if (table.length == 0)
         playerChkoba++;
-    setTimeout(() => {
-        updateUI();
-        computerPlay();
-        updateUI();
-        isPlayerTurn = true;
-        initCardsSelection()
-    }, 1000)
+    // setTimeout(() => {
+    console.log("=====computer will play=====")
+    updateUI();
+    computerPlay();
+    updateUI();
+    console.log("=====computer finishe play=====")
+    isPlayerTurn = true;
+    initCardsSelection()
+    // }, 1000)
 
 });
 
@@ -186,13 +188,17 @@ throwBtn.addEventListener('click', e => {
 
         if (checkGameEnd()) return;
 
-        setTimeout(() => {
-            updateUI();
-            computerPlay();
-            updateUI();
-            isPlayerTurn = true;
-            initCardsSelection()
-        }, 1000)
+        // setTimeout(() => {
+        console.log("=====computer will play=====")
+
+        updateUI();
+        computerPlay();
+        updateUI();
+        console.log("=====computer finishe play=====")
+
+        isPlayerTurn = true;
+        initCardsSelection()
+        // }, 1000)
     }
 });
 
@@ -262,7 +268,6 @@ function upadtePlayerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        console.log({ img: card.img })
         cardImage.src = card?.img;
         cardImage.alt = "Card";
         cardImage.className = "card";
@@ -302,7 +307,9 @@ function updateComputerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        cardImage.src = "public/img/back_card.png";
+        // cardImage.src = "public/img/back_card.png";
+        cardImage.src = card.img;
+
         cardImage.alt = "Card";
 
         cardDiv.appendChild(cardImage);
@@ -324,7 +331,7 @@ function updateUI() {
 function startGame() {
     deck = initDeck();
     run();
-    console.log({ table, playerHand, computerHand, deck })
+    // console.log({ table, playerHand, computerHand, deck })
     updateUI();
     initCardsSelection();
 }
@@ -334,15 +341,21 @@ function calculateScore() {
     computerScore = 0;
 
     //carta
-    if (playerWonCards.length > 20)
+    if (playerWonCards.length > 20) {
+        //store in local storage
+        localStorage.setItem("Karta", 1)
         playerScore++;
+    }
     if (playerWonCards.length < 20)
         computerScore++;
+
     //7aya 
     //search for card 7aya 
     let card7 = playerWonCards.find(c => c.type === 'diamonds' && c.val === '7');
-    if (card7)
+    if (card7) {
+        localStorage.setItem("7aya", 1)
         playerScore++;
+    }
     else
         computerScore++;
 
@@ -350,21 +363,27 @@ function calculateScore() {
 
     //dinary
     let dinari = playerWonCards.filter(c => c.type === 'diamonds');
-    if (dinari.length > 5)
+    if (dinari.length > 5) {
         playerScore++;
+        localStorage.setItem("Dinari", 1)
+    }
     else
         computerScore++;
     //birmila
     let sevens = playerWonCards.filter(c => c.val === 7);
-    if (sevens.length > 2)
+    if (sevens.length > 2) {
         playerScore++;
+        localStorage.setItem("Bermila", 1)
+    }
     else
         if (sevens.length < 2)
             computerScore++;
         else {
             let sixes = playerWonCards.filter(c => c.val === 6);
-            if (sixes.length > 2)
+            if (sixes.length > 2) {
                 playerScore++;
+                localStorage.setItem("Bermila", 1)
+            }
             if (sixes.length < 2)
                 computerScore++;
         }
@@ -372,9 +391,10 @@ function calculateScore() {
     //add chkoba
     playerScore += playerChkoba;
     computerScore += computerChkoba;
+    localStorage.setItem("Chkoba", playerChkoba)
+    localStorage.setItem("Score", playerScore)
 
-    console.log({ playerScore, computerScore })
-    alert(`Your score is : ${playerScore} `)
+    alert(`Your score is : ${playerScore}  || computer score is : ${computerScore}`)
 }
 
 
@@ -385,12 +405,13 @@ function computerPlay() {
     let cCardInd = 0;
     //get all possible cards to throw
     for (const ccard of computerHand) {
+        tCardInd = 0;
         for (const tcard of table) {
             if (ccard.val === tcard.val) {
                 computerWillEat = true;
                 break;
-            } tCardInd++;
-
+            }
+            tCardInd++;
         }
         if (computerWillEat) break;
         cCardInd++;
@@ -399,16 +420,13 @@ function computerPlay() {
         computerWonCards.push(computerHand[cCardInd], table[tCardInd]);
         computerHand.splice(cCardInd, 1);
         table.splice(tCardInd, 1);
-        console.log("computer eat")
 
     } else {
         //if no possible  throw random card
         const index = Math.floor(Math.random() * computerHand.length);
         table.push(computerHand[index]);
         computerHand.splice(index, 1);
-        console.log("computer throw")
     }
-    console.log("computer play", { table, playerHand, computerHand })
     isPlayerTurn = true;
 
 }
