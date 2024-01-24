@@ -50,7 +50,6 @@ function throwCard(card) {
             playerHand[index].isSelected = false;
             table.push(playerHand[index]);
             playerHand.splice(index, 1);
-            console.log({ table, playerHand, computerHand })
             isPlayerTurn = false;
         }
     }
@@ -71,7 +70,6 @@ function eatCard(handCard, tableCards) {
         //check if sum of table cards is equal to hand card
         let sum = 0;
         //sum table cards with class card-selected and inside div with id table-cards
-        console.log({ tableCards, handCard })
         for (const card of tableCards)
             sum += parseInt(card.val);
 
@@ -120,7 +118,6 @@ function syncSelectionFromUI(card) {
             table[tableCardIndex].isSelected = card.classList.contains("card-selected");
 
     }
-    console.log({ playerHand, table })
 
 
 }
@@ -145,12 +142,9 @@ eatBtn.addEventListener('click', e => {
     cards.forEach(card =>
         syncSelectionFromUI(card));
 
-    console.log({ playerHand, table });
-
     const selectedHandCard = playerHand.find(c => c.isSelected);
     const selectedTableCards = table.filter(c => c.isSelected);
 
-    console.log({ selectedTableCards })
     if (!eatCard(selectedHandCard, selectedTableCards)) return;
 
     updateUI();
@@ -159,21 +153,19 @@ eatBtn.addEventListener('click', e => {
     //count chkoba
     if (table.length == 0)
         playerChkoba++;
-    // setTimeout(() => {
-    console.log("=====computer will play=====")
-    updateUI();
-    computerPlay();
-    updateUI();
-    console.log("=====computer finishe play=====")
-    isPlayerTurn = true;
-    initCardsSelection()
-    // }, 1000)
+
+    setTimeout(() => {
+        updateUI();
+        computerPlay();
+        updateUI();
+        isPlayerTurn = true;
+        initCardsSelection()
+    }, 1000)
 
 });
 
 //throw card: 
 throwBtn.addEventListener('click', e => {
-    console.log("throw")
     e.preventDefault();
 
     const cards = document.querySelectorAll('.card');
@@ -188,17 +180,13 @@ throwBtn.addEventListener('click', e => {
 
         if (checkGameEnd()) return;
 
-        // setTimeout(() => {
-        console.log("=====computer will play=====")
-
-        updateUI();
-        computerPlay();
-        updateUI();
-        console.log("=====computer finishe play=====")
-
-        isPlayerTurn = true;
-        initCardsSelection()
-        // }, 1000)
+        setTimeout(() => {
+            updateUI();
+            computerPlay();
+            updateUI();
+            isPlayerTurn = true;
+            initCardsSelection()
+        }, 1000)
     }
 });
 
@@ -307,8 +295,8 @@ function updateComputerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        // cardImage.src = "public/img/back_card.png";
-        cardImage.src = card.img;
+        cardImage.src = "public/img/back_card.png";
+        // cardImage.src = card.img;
 
         cardImage.alt = "Card";
 
@@ -331,7 +319,6 @@ function updateUI() {
 function startGame() {
     deck = initDeck();
     run();
-    // console.log({ table, playerHand, computerHand, deck })
     updateUI();
     initCardsSelection();
 }
