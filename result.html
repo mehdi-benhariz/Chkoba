@@ -28,17 +28,24 @@
             window.location.href = "index.html";
         }
         function laodScore() {
-            let score = localStorage.getItem("score");
-            let chkoba = localStorage.getItem("chkoba");
-            let karta = localStorage.getItem("karta");
-            let bermila = localStorage.getItem("bermila");
-            let dinari = localStorage.getItem("dinari");
-            let haya = localStorage.getItem("haya");
           
             //get score from local storage
-            const 
+            const Pkarta =localStorage.getItem("Karta") ?? 0;
+            const Pbermila =localStorage.getItem("Bermila") ?? 0;
+            const Pdinari =localStorage.getItem("Dinari") ?? 0;
+            const Phaya =localStorage.getItem("7aya") ?? 0;
+            const Pchkoba =localStorage.getItem("Chkoba");
+            const Pscore =localStorage.getItem("Score");
+            //display score
+            document.getElementById("score").innerHTML = Pscore;
+            document.getElementById("Chkoba").innerHTML = Pchkoba;
+            document.getElementById("Karta").innerHTML = Pkarta;
+            document.getElementById("Bermila").innerHTML = Pbermila;
+            document.getElementById("Dinari").innerHTML = Pdinari;
+            document.getElementById("7aya").innerHTML = Phaya;
 
         }
+        laodScore()
     </script>
 
 </body>
