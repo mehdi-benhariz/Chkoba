@@ -159,13 +159,15 @@ eatBtn.addEventListener('click', e => {
     //count chkoba
     if (table.length == 0)
         playerChkoba++;
-    setTimeout(() => {
-        updateUI();
-        computerPlay();
-        updateUI();
-        isPlayerTurn = true;
-        initCardsSelection()
-    }, 1000)
+    // setTimeout(() => {
+    console.log("=====computer will play=====")
+    updateUI();
+    computerPlay();
+    updateUI();
+    console.log("=====computer finishe play=====")
+    isPlayerTurn = true;
+    initCardsSelection()
+    // }, 1000)
 
 });
 
@@ -186,13 +188,17 @@ throwBtn.addEventListener('click', e => {
 
         if (checkGameEnd()) return;
 
-        setTimeout(() => {
-            updateUI();
-            computerPlay();
-            updateUI();
-            isPlayerTurn = true;
-            initCardsSelection()
-        }, 1000)
+        // setTimeout(() => {
+        console.log("=====computer will play=====")
+
+        updateUI();
+        computerPlay();
+        updateUI();
+        console.log("=====computer finishe play=====")
+
+        isPlayerTurn = true;
+        initCardsSelection()
+        // }, 1000)
     }
 });
 
@@ -262,7 +268,6 @@ function upadtePlayerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        console.log({ img: card.img })
         cardImage.src = card?.img;
         cardImage.alt = "Card";
         cardImage.className = "card";
@@ -302,7 +307,9 @@ function updateComputerHandUI() {
         // Create a new card div
         const cardDiv = document.createElement("div");
         const cardImage = document.createElement("img");
-        cardImage.src = "public/img/back_card.png";
+        // cardImage.src = "public/img/back_card.png";
+        cardImage.src = card.img;
+
         cardImage.alt = "Card";
 
         cardDiv.appendChild(cardImage);
@@ -324,7 +331,7 @@ function updateUI() {
 function startGame() {
     deck = initDeck();
     run();
-    console.log({ table, playerHand, computerHand, deck })
+    // console.log({ table, playerHand, computerHand, deck })
     updateUI();
     initCardsSelection();
 }
@@ -385,12 +392,13 @@ function computerPlay() {
     let cCardInd = 0;
     //get all possible cards to throw
     for (const ccard of computerHand) {
+        tCardInd = 0;
         for (const tcard of table) {
             if (ccard.val === tcard.val) {
                 computerWillEat = true;
                 break;
-            } tCardInd++;
-
+            }
+            tCardInd++;
         }
         if (computerWillEat) break;
         cCardInd++;
@@ -399,16 +407,13 @@ function computerPlay() {
         computerWonCards.push(computerHand[cCardInd], table[tCardInd]);
         computerHand.splice(cCardInd, 1);
         table.splice(tCardInd, 1);
-        console.log("computer eat")
 
     } else {
         //if no possible  throw random card
         const index = Math.floor(Math.random() * computerHand.length);
         table.push(computerHand[index]);
         computerHand.splice(index, 1);
-        console.log("computer throw")
     }
-    console.log("computer play", { table, playerHand, computerHand })
     isPlayerTurn = true;
 
 }

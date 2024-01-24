@@ -7,13 +7,38 @@
     <link rel="stylesheet" href="style.css">
 
 </head>
-<body>
+<body id="result-page">
     
-    <div id="score-table"></div>
+    <div id="score-table">
+            <h2>Your score is :</h2>
+            <div id="score">5</div>
+            <ul>
+                <li>Chkoba :  <span id="chkoba"> </span> </li>
+                <li>Karta :  <span id="Karta"></span> </li>
+                <li>Bermila :  <span id="Bermila"></span> </li>
+                <li>Dinari :  <span id="Dinari"></span> </li>
+                <li>7aya :  <span id="7aya"></span> </li>
+
+            </ul>
+            <button id="playAgainBtn" onclick="replay()">Play again</button>
+    </div>
 
     <script >
-    console.log({ playerScore, computerScore })
+        function replay(){
+            window.location.href = "index.html";
+        }
+        function laodScore() {
+            let score = localStorage.getItem("score");
+            let chkoba = localStorage.getItem("chkoba");
+            let karta = localStorage.getItem("karta");
+            let bermila = localStorage.getItem("bermila");
+            let dinari = localStorage.getItem("dinari");
+            let haya = localStorage.getItem("haya");
+          
+            //get score from local storage
+            
 
+        }
     </script>
 
 </body>
