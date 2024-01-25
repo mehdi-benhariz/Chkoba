@@ -211,3 +211,24 @@ li {
     margin: 0;
     padding: 0;
 }
+
+/* toast notifs */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 300px;
+    margin: 0 auto;
+    z-index: 9999;
+}
+
+.toast {
+    background-color: #58e755;
+    color: #fff;
+    padding: 12px 35px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}

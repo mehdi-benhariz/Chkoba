@@ -42,6 +42,27 @@ function extractRelativePath(url) {
     return parts.length > 1 ? 'public/' + parts[1] : url;
 }
 
+// show custom notifs
+function showToast(msg) {
+    const toastContainer = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = msg;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 10);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
 
 function throwCard(card) {
     if (isPlayerTurn) {
@@ -74,13 +95,13 @@ function eatCard(handCard, tableCards) {
             sum += parseInt(card.val);
 
         if (sum !== parseInt(handCard.val)) {
-            console.log("sum isn't equal !")
+            showToast("sum isn't equal !")
             return false;
         }
         if (tableCards.length > 1) {
             for (const card of table)
                 if (card.val === handCard.val) {
-                    console.log(`Eat ${card.val} with ${handCard.val}!`)
+                    showToast(`Eat ${card.val} with ${handCard.val}!`)
                     return false;
                 }
         }
@@ -137,7 +158,6 @@ document.addEventListener('DOMContentLoaded', initCardsSelection);
 //eat cards:
 eatBtn.addEventListener('click', e => {
     e.preventDefault();
-
     const cards = document.querySelectorAll('.card');
     cards.forEach(card =>
         syncSelectionFromUI(card));
@@ -151,8 +171,11 @@ eatBtn.addEventListener('click', e => {
     if (checkGameEnd()) return;
 
     //count chkoba
-    if (table.length == 0)
+    console.log(table)
+    if (table.length == 0) {
         playerChkoba++;
+        showToast("Chkobaa !");
+    }
 
     setTimeout(() => {
         updateUI();
@@ -229,6 +252,8 @@ function getRandomAndRemove(array) {
 }
 
 function run() {
+    if (deck.length === 6)
+        showToast("last run !")
     //get 4 cards in table
     if (deck.length === 40)
         for (let i = 0; i < 4; i++) {
@@ -245,6 +270,7 @@ function run() {
         const card = getRandomAndRemove(deck);
         computerHand.push(card);
     }
+
 }
 // update playerHandUI
 function upadtePlayerHandUI() {
