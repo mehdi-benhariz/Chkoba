@@ -232,3 +232,23 @@ li {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
+
+/* audio button style */
+#toggleButton {
+    position: fixed;
+    top: 10px;
+    right: 10px; 
+    z-index: 9999; 
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+}
+
+#toggleIcon {
+    width: 45px; 
+    height: 45px; 
+    color:  #58e755;
+    /* background-color: #58e755; */
+}
