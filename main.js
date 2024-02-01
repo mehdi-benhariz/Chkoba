@@ -56,7 +56,7 @@ function toggleAudio() {
         });
     } else {
         audio.pause();
-        audio.currentTime = 0; // Reset audio to the beginning
+        // audio.currentTime = 0; // Reset audio to the beginning
     }
 }
 
@@ -64,6 +64,7 @@ function toggleAudio() {
 document.getElementById("toggleButton").addEventListener("click", function () {
     toggleAudio();
 });
+
 // show custom notifs
 function showToast(msg) {
     const toastContainer = document.getElementById('toast-container');
