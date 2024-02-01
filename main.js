@@ -394,7 +394,8 @@ function startGame() {
 function calculateScore() {
     playerScore = 0;
     computerScore = 0;
-
+    //clear local storage
+    localStorage.clear()
     //carta
     if (playerWonCards.length > 20) {
         //store in local storage
