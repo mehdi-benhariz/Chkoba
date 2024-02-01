@@ -41,6 +41,11 @@ audio.src = "public/audio/background_sound.mp3";
 audio.volume = 0.5;
 audio.loop = true;
 
+var sound_effect = new Audio();
+sound_effect.src = "public/audio/sound_effect.mp3";
+sound_effect.volume = 0.5;
+
+
 //helper:
 function extractRelativePath(url) {
     const parts = url.split('/public/');
@@ -60,9 +65,21 @@ function toggleAudio() {
     }
 }
 
+//sound effect
+
+function makeSoundEffect() {
+    sound_effect.play().then(function () {
+        console.log('sound_effect playback started successfully');
+    }).catch(function (error) {
+        console.error('sound_effect playback error:', error.message);
+    });
+
+}
+
 // Event listener for the toggle button
 document.getElementById("toggleButton").addEventListener("click", function () {
     toggleAudio();
+
 });
 
 // show custom notifs
@@ -181,6 +198,7 @@ document.addEventListener('DOMContentLoaded', initCardsSelection);
 //eat cards:
 eatBtn.addEventListener('click', e => {
     e.preventDefault();
+
     const cards = document.querySelectorAll('.card');
     cards.forEach(card =>
         syncSelectionFromUI(card));
@@ -194,10 +212,11 @@ eatBtn.addEventListener('click', e => {
     if (checkGameEnd()) return;
 
     //count chkoba
-    console.log(table)
+    console.log({ table })
     if (table.length == 0) {
         playerChkoba++;
         showToast("Chkobaa !");
+        makeSoundEffect();
     }
 
     setTimeout(() => {
@@ -375,7 +394,8 @@ function startGame() {
 function calculateScore() {
     playerScore = 0;
     computerScore = 0;
-
+    //clear local storage
+    localStorage.clear()
     //carta
     if (playerWonCards.length > 20) {
         //store in local storage
