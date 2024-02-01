@@ -35,6 +35,11 @@ const throwBtn = document.getElementById('throwBtn');
 const eatBtn = document.getElementById('eatBtn');
 const runBtn = document.getElementById('runBtn');
 
+//init sound
+var audio = new Audio();
+audio.src = "public/audio/background_sound.mp3";
+audio.volume = 0.5;
+audio.loop = true;
 
 //helper:
 function extractRelativePath(url) {
@@ -42,6 +47,45 @@ function extractRelativePath(url) {
     return parts.length > 1 ? 'public/' + parts[1] : url;
 }
 
+function toggleAudio() {
+    if (audio.paused) {
+        audio.play().then(function () {
+            console.log('Audio playback started successfully');
+        }).catch(function (error) {
+            console.error('Audio playback error:', error.message);
+        });
+    } else {
+        audio.pause();
+        // audio.currentTime = 0; // Reset audio to the beginning
+    }
+}
+
+// Event listener for the toggle button
+document.getElementById("toggleButton").addEventListener("click", function () {
+    toggleAudio();
+});
+
+// show custom notifs
+function showToast(msg) {
+    const toastContainer = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = msg;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 10);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
 
 function throwCard(card) {
     if (isPlayerTurn) {
@@ -74,13 +118,13 @@ function eatCard(handCard, tableCards) {
             sum += parseInt(card.val);
 
         if (sum !== parseInt(handCard.val)) {
-            console.log("sum isn't equal !")
+            showToast("sum isn't equal !")
             return false;
         }
         if (tableCards.length > 1) {
             for (const card of table)
                 if (card.val === handCard.val) {
-                    console.log(`Eat ${card.val} with ${handCard.val}!`)
+                    showToast(`Eat ${card.val} with ${handCard.val}!`)
                     return false;
                 }
         }
@@ -137,7 +181,6 @@ document.addEventListener('DOMContentLoaded', initCardsSelection);
 //eat cards:
 eatBtn.addEventListener('click', e => {
     e.preventDefault();
-
     const cards = document.querySelectorAll('.card');
     cards.forEach(card =>
         syncSelectionFromUI(card));
@@ -151,8 +194,11 @@ eatBtn.addEventListener('click', e => {
     if (checkGameEnd()) return;
 
     //count chkoba
-    if (table.length == 0)
+    console.log(table)
+    if (table.length == 0) {
         playerChkoba++;
+        showToast("Chkobaa !");
+    }
 
     setTimeout(() => {
         updateUI();
@@ -229,6 +275,8 @@ function getRandomAndRemove(array) {
 }
 
 function run() {
+    if (deck.length === 6)
+        showToast("last run !")
     //get 4 cards in table
     if (deck.length === 40)
         for (let i = 0; i < 4; i++) {
@@ -245,6 +293,7 @@ function run() {
         const card = getRandomAndRemove(deck);
         computerHand.push(card);
     }
+
 }
 // update playerHandUI
 function upadtePlayerHandUI() {
@@ -338,7 +387,7 @@ function calculateScore() {
 
     //7aya 
     //search for card 7aya 
-    let card7 = playerWonCards.find(c => c.type === 'diamonds' && c.val === '7');
+    let card7 = playerWonCards.find(c => c.type === 'diamonds' && c.val == '7');
     if (card7) {
         localStorage.setItem("7aya", 1)
         playerScore++;
@@ -357,23 +406,30 @@ function calculateScore() {
     else
         computerScore++;
     //birmila
-    let sevens = playerWonCards.filter(c => c.val === 7);
+    let sevens = playerWonCards.filter(c => c.val == 7);
     if (sevens.length > 2) {
         playerScore++;
         localStorage.setItem("Bermila", 1)
     }
-    else
-        if (sevens.length < 2)
+    else {
+
+        if (sevens.length < 2) {
+            localStorage.setItem("Bermila", 0)
+
             computerScore++;
+        }
         else {
-            let sixes = playerWonCards.filter(c => c.val === 6);
+            let sixes = playerWonCards.filter(c => c.val == 6);
             if (sixes.length > 2) {
                 playerScore++;
                 localStorage.setItem("Bermila", 1)
             }
             if (sixes.length < 2)
                 computerScore++;
+            localStorage.setItem("Bermila", 0)
+
         }
+    }
 
     //add chkoba
     playerScore += playerChkoba;
